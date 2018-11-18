@@ -3,7 +3,10 @@ package nl.pvanassen.christmas.tree.canvas
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 
-class Canvas(private val strips:Int, private val ledsPerStrip: Int) {
+/**
+ * Canvas class to draw pixels with
+ */
+public class Canvas(private val strips:Int, private val ledsPerStrip: Int) {
 
     private val mask: BufferedImage = ImageIO.read(Canvas::class.java.getResourceAsStream("/mask-$strips-$ledsPerStrip.png"))
     val canvas: BufferedImage
@@ -37,6 +40,12 @@ class Canvas(private val strips:Int, private val ledsPerStrip: Int) {
             }
         }
         return values
+    }
+
+    fun setValue(strip:Int, pixel:Int, color:Int) {
+        val x = positions.getX(strip, pixel)
+        val y = positions.getY(strip, pixel)
+        canvas.setRGB(x, y, color)
     }
 
     class Positions(private val positions:List<Position>, strips: Int, pixels:Int) {
