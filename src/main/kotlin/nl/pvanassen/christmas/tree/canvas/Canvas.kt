@@ -48,6 +48,22 @@ public class Canvas(private val strips:Int, private val ledsPerStrip: Int) {
         canvas.setRGB(x, y, color)
     }
 
+    fun setImage(offsetX:Int, offsetY:Int, image:BufferedImage, outOfBoundsBlack: Boolean = true) {
+        for (strip in 0 until strips) {
+            for (pixel in 0 until ledsPerStrip) {
+                val x = positions.getX(strip, pixel) + offsetX
+                val y = positions.getY(strip, pixel) + offsetY
+                val color = if ((x >= image.width || y >= image.height) && outOfBoundsBlack) {
+                    0
+                }
+                else {
+                    image.getRGB(Math.max(0, x), Math.max(0, y))
+                }
+                canvas.setRGB(positions.getX(strip, pixel), positions.getY(strip, pixel), color)
+            }
+        }
+    }
+
     class Positions(private val positions:List<Position>, strips: Int, pixels:Int) {
 
         private val raster:Array<Array<Position>>
